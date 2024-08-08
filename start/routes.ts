@@ -26,16 +26,16 @@ router
   })
   .prefix('user')
 
-router
-  .get('me', async ({ auth, response }) => {
-    try {
-      const user = auth.getUserOrFail()
-      return response.ok(user)
-    } catch (error) {
-      return response.unauthorized({ error: 'User not found' })
-    }
-  })
-  .use(middleware.auth())
+// router
+//   .get('me', async ({ auth, response }) => {
+//     try {
+//       const user = auth.getUserOrFail()
+//       return response.ok(user)
+//     } catch (error) {
+//       return response.unauthorized({ error: 'User not found' })
+//     }
+//   })
+//   .use(middleware.auth())
 
 router
   .group(() => {
@@ -71,3 +71,4 @@ router
   })
   .prefix('store')
   .use(middleware.auth())
+  .use(middleware.validate())

@@ -8,13 +8,6 @@ export default class Company {
    * @returns - A store associada ao usuário logado.
    */
   static async verifyStoreOwner(storeId: number | string, userId: number) {
-    // Verifica se a loja pertence ao usuário
-    const store = await Store.query().where('id', storeId).andWhere('user_id', userId).first()
-
-    if (!store) {
-      throw new Error('Loja não encontrada ou não pertence ao usuário')
-    }
-
-    return store
+    return await Store.query().where('id', storeId).andWhere('user_id', userId).first()
   }
 }

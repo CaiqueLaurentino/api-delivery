@@ -3,6 +3,8 @@ import Product from '#models/product'
 import { createProductValidator, updateProductValidator } from '#validators/product'
 import Company from '#services/company_service'
 import Category from '#models/category'
+import { messages } from '@vinejs/vine/defaults'
+import StoreException from '#exceptions/store_exception'
 
 type ObjProduct = {
   store_id: number
@@ -48,6 +50,10 @@ export default class ProductController {
 
       const store = await Company.verifyStoreOwner(storeId, auth.user!.id)
 
+      if (!store) {
+        throw StoreException.notFound()
+      }
+
       const objProduct: ObjProduct = {
         ...payload,
         store_id: store.id,
@@ -75,6 +81,10 @@ export default class ProductController {
 
       const store = await Company.verifyStoreOwner(storeId, auth.user!.id)
 
+      if (!store) {
+        return response.notFound({ messages: 'Not found' })
+      }
+
       const product = await Product.query()
         .where('id', productId)
         .andWhere('store_id', store.id)
@@ -93,7 +103,7 @@ export default class ProductController {
       }
 
       const existingProduct = await Product.query()
-        .where('store_id', store.id)
+        .where('store_id', store!.id)
         .andWhere((q) => {
           if (payload.name) {
             q.where('name', payload.name)
@@ -134,7 +144,7 @@ export default class ProductController {
 
       const product = await Product.query()
         .where('id', productId)
-        .andWhere('store_id', store.id)
+        .andWhere('store_id', store!.id)
         .first()
 
       if (!product) {
