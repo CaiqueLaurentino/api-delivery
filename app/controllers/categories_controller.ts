@@ -1,7 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { createCategoryValidator, updateCategoryValidator } from '#validators/category'
 import Category from '#models/category'
-import Company from '#services/company_service'
+import CompanyService from '#services/company_service'
+import CategoryService from '#services/category_service'
+import CategoryException from '#exceptions/category_exception'
 
 type ObjCategory = {
   name: string
@@ -11,82 +13,73 @@ type ObjCategory = {
 
 export default class CategoryController {
   async index({ response, request, auth }: HttpContext) {
-    const storeId = request.header('store_id') //USAR OUTRA COISA// algum tipo de hash
+    const storeId = request.header('store_id')
 
-    if (!storeId) {
-      return response.badRequest({ message: 'ID da loja não fornecido' })
-    }
-
-    const userStore = await Company.verifyStoreOwner(storeId, auth.user!.id)
+    const userStore = await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
 
     const categories = await Category.query().where('store_id', userStore.id)
 
     return response.ok(categories)
   }
 
-  async show({ params, response }: HttpContext) {
+  async show({ params, response, auth, request }: HttpContext) {
+    const storeId = request.header('store_id')
+
+    const userStore = await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
+
     const categoryId = params.id
-    const category = await Category.find(categoryId)
+
+    const category = await CategoryService.verifyCategory(userStore.id, categoryId)
 
     if (!category) {
-      return response.notFound({ message: 'Category not found' })
+      throw CategoryException.notFound()
     }
 
     return response.ok(category)
   }
 
   async store({ request, response, auth }: HttpContext) {
-    try {
-      const storeId = request.header('store_id')
+    const storeId = request.header('store_id')
 
-      if (!storeId) {
-        return response.badRequest({ message: 'ID da loja não fornecido' })
-      }
+    const userStore = await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
 
-      const store = await Company.verifyStoreOwner(storeId, auth.user!.id)
+    const payload = await request.validateUsing(createCategoryValidator(userStore.id))
 
-      const payload = await request.validateUsing(createCategoryValidator(store.id))
-
-      const objCategory: ObjCategory = {
-        ...payload,
-        store_id: store.id,
-      }
-
-      const category = await Category.create(objCategory)
-
-      return response.created(category)
-    } catch (error) {
-      throw error
+    const objCategory: ObjCategory = {
+      ...payload,
+      store_id: userStore.id,
     }
+
+    const category = await Category.create(objCategory)
+
+    return response.created(category)
   }
 
-  async update({ params, request, response }: HttpContext) {
+  async update({ params, request, response, auth }: HttpContext) {
+    const storeId = request.header('store_id')
+
+    const userStore = await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
+
     const categoryId = params.id
-    const category = await Category.find(categoryId)
 
-    if (!category) {
-      return response.notFound({ message: 'Categoria não encontrada' })
-    }
+    const category = await CategoryService.verifyCategory(userStore.id, categoryId)
 
-    try {
-      const payload = await request.validateUsing(updateCategoryValidator)
+    const payload = await request.validateUsing(updateCategoryValidator)
 
-      category.merge(payload)
-      await category.save()
+    category.merge(payload)
+    await category.save()
 
-      return response.ok(category)
-    } catch (error) {
-      return response.badRequest({ message: error.message })
-    }
+    return response.ok(category)
   }
 
-  async destroy({ params, response }: HttpContext) {
-    const categoryId = params.id
-    const category = await Category.find(categoryId)
+  async destroy({ params, response, request, auth }: HttpContext) {
+    const storeId = request.header('store_id')
 
-    if (!category) {
-      return response.notFound({ message: 'Category not found' })
-    }
+    const userStore = await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
+
+    const categoryId = params.id
+
+    const category = await CategoryService.verifyCategory(userStore.id, categoryId)
 
     await category.delete()
     return response.ok({ message: 'Category deleted successfully' })

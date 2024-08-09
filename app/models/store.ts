@@ -1,5 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
+import Product from '#models/product'
+import Category from './category.js'
+import Order from './order.js'
 
 export default class Store extends BaseModel {
   @column({ isPrimary: true })
@@ -23,9 +27,28 @@ export default class Store extends BaseModel {
   @column()
   declare logoUrl: string | null
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({ autoCreate: true, serializeAs: null })
   declare createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null })
   declare updatedAt: DateTime
+
+  /**
+   * Relacionamentos
+   */
+
+  @hasMany(() => Product, {
+    foreignKey: 'id',
+  })
+  declare products: HasMany<typeof Product>
+
+  @hasMany(() => Category, {
+    foreignKey: 'id',
+  })
+  declare categories: HasMany<typeof Category>
+
+  @hasMany(() => Order, {
+    foreignKey: 'id',
+  })
+  declare orders: HasMany<typeof Order>
 }
