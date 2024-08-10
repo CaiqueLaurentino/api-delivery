@@ -8,25 +8,25 @@ export default class Order extends BaseModel {
   declare id: number
 
   @column()
-  declare storeId: number
+  declare store_id: number
 
   @column()
-  declare userId: number | null
+  declare user_id: number | null
 
   @column()
   declare status: 'pending' | 'in_progress' | 'completed' | 'cancelled'
 
   @column()
-  declare totalAmount: number
+  declare total_amount: number
 
   @column()
-  declare deliveryFee: number
+  declare delivery_fee: number
 
   @column()
-  declare deliveryAddress: string
+  declare address_id: number
 
   @column()
-  declare paymentMethod: 'cash' | 'credit_card' | 'debit_card' | 'paypal'
+  declare payment_method: 'cash' | 'credit_card' | 'debit_card' | 'paypal'
 
   @column.dateTime({ autoCreate: true, serializeAs: null })
   declare createdAt: DateTime

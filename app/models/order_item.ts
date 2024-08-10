@@ -9,10 +9,10 @@ export default class OrderItem extends BaseModel {
   declare id: number
 
   @column()
-  declare orderId: number
+  declare order_id: number
 
   @column()
-  declare productId: number
+  declare product_id: number
 
   @column()
   declare quantity: number

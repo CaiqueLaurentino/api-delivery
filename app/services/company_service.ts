@@ -30,16 +30,16 @@ export default class CompanyService {
     // Carregar a loja e seus dados associados
     const userStore = await Store.query()
       .where('id', storeId)
-      .preload('products') // Carrega produtos da loja
-      .preload('categories') // Carrega categorias da loja
+      .preload('products')
+      .preload('categories')
       .preload('orders', (query) => {
         query.preload('orderItems', (orderItemsQuery) => {
           orderItemsQuery.preload('product')
         })
       })
-      // .preload('coupons')  // Se você tiver cupons
-      // .preload('invoices')  // Se você tiver faturas
-      // .preload('delivery_drivers')  // Se você tiver motoristas de entrega
+      // .preload('coupons')
+      // .preload('invoices')
+      // .preload('delivery_drivers')
       .firstOrFail()
 
     return userStore

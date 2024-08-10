@@ -10,7 +10,7 @@ export default class Store extends BaseModel {
   declare id: number
 
   @column()
-  declare userId: number
+  declare user_id: number
 
   @column()
   declare name: string
@@ -22,10 +22,10 @@ export default class Store extends BaseModel {
   declare address: string | null
 
   @column()
-  declare contactInfo: string | null
+  declare contact_info: string | null
 
   @column()
-  declare logoUrl: string | null
+  declare logo_url: string | null
 
   @column.dateTime({ autoCreate: true, serializeAs: null })
   declare createdAt: DateTime
