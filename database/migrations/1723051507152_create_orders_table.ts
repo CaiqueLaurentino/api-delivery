@@ -30,7 +30,7 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('addresses')
         .onDelete('RESTRICT') // Restrict to ensure address is valid
-      table.enum('payment_method', ['cash', 'credit_card', 'debit_card', 'paypal']).notNullable()
+      table.enum('payment_method', ['cash', 'credit_card', 'debit_card', 'pix', 'voucher']).notNullable()
       table.timestamp('created_at').defaultTo(this.now())
       table.timestamp('updated_at').defaultTo(this.now())
     })

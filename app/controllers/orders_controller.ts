@@ -3,16 +3,17 @@ import Order from '#models/order'
 import { createOrderValidator, updateOrderValidator } from '#validators/order'
 import CompanyService from '#services/company_service'
 import OrderService from '#services/order_service'
-import AddressService from '#services/address_service'
+// import AddressService from '#services/address_service'
+import { PaymentMethods, Status } from '#/enum/enums.js'
 
 type ObjOrder = {
   store_id: number
   user_id: number | null
-  status: 'pending' | 'in_progress' | 'completed' | 'cancelled'
+  status: Status
   total_amount: number
   delivery_fee: number
   address_id: number
-  payment_method: 'cash' | 'credit_card' | 'debit_card' | 'paypal'
+  payment_method: PaymentMethods
 }
 
 export default class OrderController {
@@ -52,11 +53,11 @@ export default class OrderController {
 
       const payload = await request.validateUsing(createOrderValidator(storeId!))
 
-      await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
+      const userStore = await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
 
       const objOrder: ObjOrder = {
         ...payload,
-        store_id: storeId!,
+        store_id: userStore!.id,
       }
 
       const order = await Order.create(objOrder)
@@ -67,30 +68,30 @@ export default class OrderController {
     }
   }
 
-  async update({ params, request, response, auth }: HttpContext) {
-    try {
-      const storeId = request.header('store_id')
+  // async update({ params, request, response, auth }: HttpContext) {
+  //   try {
+  //     const storeId = request.header('store_id')
 
-      await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
+  //     await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
 
-      const orderId = params.id
+  //     const orderId = params.id
 
-      const order = await OrderService.verifyOrder(storeId!, orderId)
+  //     const order = await OrderService.verifyOrder(storeId!, orderId)
 
-      const payload = await request.validateUsing(updateOrderValidator)
+  //     const payload = await request.validateUsing(updateOrderValidator)
 
-      if (payload.address_id) {
-        await AddressService.verifyAddress(storeId!, payload.address_id)
-      }
+  //     if (payload.address_id) {
+  //       await AddressService.verifyAddress(storeId!, payload.address_id)
+  //     }
 
-      order.merge(payload)
-      await order.save()
+  //     order.merge(payload)
+  //     await order.save()
 
-      return response.ok(order)
-    } catch (error) {
-      return response.badRequest({ message: error.message })
-    }
-  }
+  //     return response.ok(order)
+  //   } catch (error) {
+  //     return response.badRequest({ message: error.message })
+  //   }
+  // }
 
   async destroy({ params, request, response, auth }: HttpContext) {
     try {

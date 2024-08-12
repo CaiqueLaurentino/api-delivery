@@ -13,6 +13,7 @@ const ProductController = () => import('#controllers/products_controller')
 const AuthController = () => import('#controllers/auth_controller')
 const StoreController = () => import('#controllers/stores_controller')
 const CategoryController = () => import('#controllers/categories_controller')
+const OrdersController = () => import('#controllers/orders_controller')
 
 /**
  * Login/Register Routes
@@ -68,6 +69,12 @@ router
     router.post('products', [ProductController, 'store'])
     router.put('products/:id', [ProductController, 'update'])
     router.delete('products/:id', [ProductController, 'destroy'])
+
+    /**
+     * Orders Routes
+     */
+
+    router.get('orders', [OrdersController, 'index'])
   })
   .prefix('store')
   .use(middleware.auth())

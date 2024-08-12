@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import OrderItem from './order_item.js'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
+import { PaymentMethods, Status } from '#/enum/enums.js'
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true })
@@ -26,7 +27,7 @@ export default class Order extends BaseModel {
   declare address_id: number
 
   @column()
-  declare payment_method: 'cash' | 'credit_card' | 'debit_card' | 'paypal'
+  declare payment_method: 'cash' | 'credit_card' | 'debit_card' | 'pix' | 'voucher'
 
   @column.dateTime({ autoCreate: true, serializeAs: null })
   declare createdAt: DateTime
