@@ -4,6 +4,7 @@ import { createProductValidator, updateProductValidator } from '#validators/prod
 import CompanyService from '#services/company_service'
 import ProductService from '#services/product_service'
 import CategoryService from '#services/category_service'
+import Category from '#models/category'
 
 type ObjProduct = {
   store_id: number
@@ -22,7 +23,7 @@ export default class ProductController {
 
       await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
 
-      const products = await Product.query().where('store_id', storeId!)
+      const products = await Category.query().preload('products').where('store_id', storeId!)
 
       return response.ok(products)
     } catch (error) {

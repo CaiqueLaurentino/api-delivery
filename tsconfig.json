@@ -2,11 +2,11 @@
   "extends": "@adonisjs/tsconfig/tsconfig.app.json",
   "compilerOptions": {
     "module": "NodeNext",
-    // "declaration": false,
-    // "esModuleInterop": true,
+    "declaration": false,
+    "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    // "skipLibCheck": true,
+    "skipLibCheck": true,
     "rootDir": "./",
     "outDir": "./build",
     "paths": {

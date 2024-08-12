@@ -75,6 +75,7 @@ router
      */
 
     router.get('orders', [OrdersController, 'index'])
+    router.post('orders', [OrdersController, 'store'])
   })
   .prefix('store')
   .use(middleware.auth())

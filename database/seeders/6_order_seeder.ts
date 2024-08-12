@@ -7,6 +7,8 @@ export default class OrderSeeder extends BaseSeeder {
       {
         store_id: 1,
         user_id: 1,
+        customer_name: 'Joaquim',
+        customer_contact: '11943852765',
         status: 'pending',
         total_amount: 49.98,
         delivery_fee: 5.0,
@@ -16,11 +18,13 @@ export default class OrderSeeder extends BaseSeeder {
       {
         store_id: 2,
         user_id: 2,
+        customer_name: 'Maria',
+        customer_contact: '11943852765',
         status: 'completed',
         total_amount: 29.99,
         delivery_fee: 3.5,
         address_id: 2,
-        payment_method: 'paypal',
+        payment_method: 'pix',
       },
     ])
   }

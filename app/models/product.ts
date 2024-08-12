@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import Category from './category.js'
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
@@ -31,4 +33,11 @@ export default class Product extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null })
   declare updatedAt: DateTime
+
+  /**
+   * Relacionamento
+   */
+
+  @belongsTo(() => Category)
+  declare category: BelongsTo<typeof Category>
 }

@@ -14,7 +14,7 @@ export default class ProductSeeder extends BaseSeeder {
         is_out_of_stock: false,
       },
       {
-        store_id: 1,
+        store_id: 2,
         category_id: 2,
         name: 'Bolacha de Manteiga',
         description: 'Bolacha crocante de manteiga, ideal para o lanche.',
