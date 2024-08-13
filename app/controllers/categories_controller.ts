@@ -17,7 +17,7 @@ export default class CategoryController {
 
     const userStore = await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
 
-    const categories = await Category.query().where('store_id', userStore.id)
+    const categories = await Category.query().select('id', 'name').where('store_id', userStore.id)
 
     return response.ok(categories)
   }
