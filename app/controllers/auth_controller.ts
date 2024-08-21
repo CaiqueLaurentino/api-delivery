@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
 import { registerValidator, loginValidator } from '#validators/auth'
+import Store from '#models/store'
 
 export default class AuthController {
   async login({ request, response }: HttpContext) {
@@ -8,9 +9,12 @@ export default class AuthController {
     const user = await User.verifyCredentials(email, password)
     const token = await User.accessTokens.create(user)
 
+    const store = await Store.query().select('id').where('user_id', user.id).firstOrFail()
+
     return response.ok({
       token: token,
       ...user.serialize(),
+      store_id: store.id,
     })
   }
 
@@ -30,3 +34,23 @@ export default class AuthController {
     return response.ok({ message: 'Logged out' })
   }
 }
+
+// const handleLogout = async () => {
+//   try {
+//     const response = await fetch('http://localhost:3333/logout', {
+//       method: 'POST',
+//       headers: {
+//         'Authorization': `Bearer ${localStorage.getItem('token')}`,
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Logout failed');
+//     }
+
+//     localStorage.removeItem('token');
+//     navigate('/login');
+//   } catch (error) {
+//     console.error('Error:', error);
+//   }
+// };
