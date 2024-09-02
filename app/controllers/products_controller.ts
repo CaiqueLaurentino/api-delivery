@@ -16,6 +16,15 @@ type ObjProduct = {
   is_out_of_stock: boolean
 }
 
+type CategoryObj = {
+  id: number
+  store_id: number
+  name: string
+  description: string
+  products: ObjProduct[]
+}
+
+type StoreData = CategoryObj[]
 export default class ProductController {
   async index({ request, response, auth }: HttpContext) {
     try {
@@ -23,8 +32,28 @@ export default class ProductController {
 
       await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
 
-      const products = await Category.query().preload('products').where('store_id', storeId!)
+      const categories: Category[] = await Category.query()
+        .preload('products')
+        .where('store_id', storeId!)
 
+      const products: StoreData = categories.map((category) => ({
+        id: category.id,
+        store_id: category.store_id,
+        name: category.name,
+        description: category.description ? category.description : '',
+        products: category.products.map((product) => ({
+          id: product.id,
+          store_id: product.store_id,
+          category_id: product.category_id,
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          image_url: product.image_url,
+          is_out_of_stock: product.is_out_of_stock,
+        })),
+      }))
+
+      // Retorna os dados formatados na resposta
       return response.ok(products)
     } catch (error) {
       return response.badRequest({ message: error.message })
