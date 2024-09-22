@@ -65,10 +65,10 @@ export default class OrderController {
         store_id: order.store_id,
         user_id: order.user_id!,
         customer_name: order.customer_name,
-        customer_contact: order.customer_contact,
+        customer_contact: order.customer_contact, // Adiciona o número de contato do cliente
         status: order.status,
-        total_amount: order.total_amount.toString(), // Converte o total_amount para string se necessário
-        delivery_fee: order.delivery_fee.toString(), // Converte o delivery_fee para string se necessário
+        total_amount: order.total_amount.toString(),
+        delivery_fee: order.delivery_fee.toString(),
         address_id: order.address_id,
         payment_method: order.payment_method,
         order_items: order.order_items.map((item) => ({
@@ -80,7 +80,6 @@ export default class OrderController {
         address: {
           location: order.address.location,
           delivery_fee: order.address.delivery_fee,
-          // Adicione outros campos necessários do endereço
         },
       }))
 
@@ -93,12 +92,14 @@ export default class OrderController {
   async show({ params, request, response, auth }: HttpContext) {
     try {
       const storeId = request.header('store_id')
-
       await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
 
       const orderId = params.id
-
-      const order = await OrderService.verifyOrder(storeId!, orderId)
+      const order = await Order.query()
+        .where('id', orderId)
+        .preload('order_items')
+        .preload('address')
+        .firstOrFail()
 
       return response.ok(order)
     } catch (error) {
@@ -117,7 +118,7 @@ export default class OrderController {
       store_id: userStore!.id,
       user_id: payload.user_id,
       customer_name: payload.customer_name,
-      customer_contact: payload.customer_contact,
+      customer_contact: payload.customer_contact, // Inclui customer_contact
       status: payload.status,
       total_amount: payload.total_amount,
       delivery_fee: payload.delivery_fee,
@@ -146,30 +147,46 @@ export default class OrderController {
     return response.created(order)
   }
 
-  // async update({ params, request, response, auth }: HttpContext) {
-  //   try {
-  //     const storeId = request.header('store_id')
+  async updateStatus({ params, request, response, auth }: HttpContext) {
+    try {
+      const orderId = params.id
+      const storeId = request.header('store_id')
 
-  //     await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
+      // Verifica se o dono da loja está autenticado
+      await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
 
-  //     const orderId = params.id
+      // Pega o novo status do corpo da requisição
+      const { status } = request.only(['status'])
 
-  //     const order = await OrderService.verifyOrder(storeId!, orderId)
+      // Verifica se o pedido existe
+      const order = await OrderService.verifyOrder(storeId!, orderId)
 
-  //     const payload = await request.validateUsing(updateOrderValidator)
+      // Atualiza o status
+      order.status = status
+      await order.save()
 
-  //     if (payload.address_id) {
-  //       await AddressService.verifyAddress(storeId!, payload.address_id)
-  //     }
+      // Mensagem personalizada dependendo do status
+      let whatsappMessage = ''
+      switch (status) {
+        case OrderStatus.IN_PROGRESS:
+          whatsappMessage = 'Seu pedido está sendo preparado!'
+          break
+        case OrderStatus.ON_DELIVERY:
+          whatsappMessage = 'Seu pedido está a caminho!'
+          break
+        case OrderStatus.COMPLETED:
+          whatsappMessage = 'Seu pedido foi entregue! Obrigado!'
+          break
+      }
 
-  //     order.merge(payload)
-  //     await order.save()
+      // Envia a mensagem pelo WhatsApp
+      await OrderService.sendWhatsAppMessage(order.customer_contact, whatsappMessage)
 
-  //     return response.ok(order)
-  //   } catch (error) {
-  //     return response.badRequest({ message: error.message })
-  //   }
-  // }
+      return response.ok({ message: 'Status do pedido atualizado com sucesso', order })
+    } catch (error) {
+      return response.badRequest({ message: error.message })
+    }
+  }
 
   async destroy({ params, request, response, auth }: HttpContext) {
     try {

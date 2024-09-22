@@ -1,8 +1,9 @@
 export enum OrderStatus {
-  Completed = 'completed',
-  Cancelled = 'cancelled',
-  InProgress = 'in_progress',
-  Pending = 'pending',
+  COMPLETED = 'completed',
+  CANCELLED = 'cancelled',
+  IN_PROGRESS = 'in_progress',
+  PEDING = 'pending',
+  ON_DELIVERY = 'on_delivery',
 }
 
 export enum PaymentMethods {

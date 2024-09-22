@@ -76,6 +76,9 @@ router
 
     router.get('orders', [OrdersController, 'index'])
     router.post('orders', [OrdersController, 'store'])
+    router.get('orders/:id', [OrdersController, 'show']) // Detalhes de um pedido específico
+    router.put('orders/:id', [OrdersController, 'updateStatus']) // Atualizar status do pedido
+    router.delete('orders/:id', [OrdersController, 'destroy'])
   })
   .prefix('store')
   .use(middleware.auth())

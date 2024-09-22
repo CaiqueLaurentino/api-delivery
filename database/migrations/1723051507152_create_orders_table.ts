@@ -22,7 +22,9 @@ export default class extends BaseSchema {
         .onDelete('SET NULL')
       table.string('customer_name').notNullable()
       table.string('customer_contact').notNullable()
-      table.enum('status', ['pending', 'in_progress', 'completed', 'cancelled']).notNullable()
+      table
+        .enum('status', ['pending', 'in_progress', 'completed', 'cancelled', 'on_delivery'])
+        .notNullable()
       table.decimal('total_amount', 10, 2).notNullable()
       table.decimal('delivery_fee', 10, 2).notNullable()
       table
