@@ -56,6 +56,49 @@ export default class OrderController {
 
       const orders = await Order.query()
         .where('store_id', userStore.id)
+        .whereNotIn('status', [OrderStatus.COMPLETED, OrderStatus.CANCELLED])
+        .preload('order_items')
+        .preload('address')
+        .orderBy('created_at', 'desc')
+
+      const objOrders: ObjOrderIndex[] = orders.map((order) => ({
+        id: order.id,
+        store_id: order.store_id,
+        user_id: order.user_id!,
+        customer_name: order.customer_name,
+        customer_contact: order.customer_contact, // Adiciona o número de contato do cliente
+        status: order.status,
+        total_amount: order.total_amount.toString(),
+        delivery_fee: order.delivery_fee.toString(),
+        address_id: order.address_id,
+        payment_method: order.payment_method,
+        order_items: order.order_items.map((item) => ({
+          order_id: item.order_id,
+          product_id: item.product_id,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+        address: {
+          location: order.address.location,
+          delivery_fee: order.address.delivery_fee,
+        },
+      }))
+
+      return response.ok(objOrders)
+    } catch (error) {
+      return response.badRequest({ message: error.message })
+    }
+  }
+
+  async history({ request, response, auth }: HttpContext) {
+    try {
+      const storeId = request.header('store_id')
+
+      const userStore = await CompanyService.verifyStoreOwner(storeId!, auth.user!.id)
+
+      const orders = await Order.query()
+        .where('store_id', userStore.id)
+        .whereIn('status', [OrderStatus.COMPLETED, OrderStatus.CANCELLED])
         .preload('order_items')
         .preload('address')
         .orderBy('created_at', 'desc')
