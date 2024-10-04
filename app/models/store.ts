@@ -39,22 +39,22 @@ export default class Store extends BaseModel {
    */
 
   @hasMany(() => Product, {
-    foreignKey: 'id',
+    foreignKey: 'store_id',
   })
   declare products: HasMany<typeof Product>
 
   @hasMany(() => Category, {
-    foreignKey: 'id',
+    foreignKey: 'store_id',
   })
   declare categories: HasMany<typeof Category>
 
   @hasMany(() => Order, {
-    foreignKey: 'id',
+    foreignKey: 'store_id',
   })
   declare orders: HasMany<typeof Order>
 
   @hasMany(() => User, {
-    foreignKey: 'id',
+    foreignKey: 'store_id',
   })
   declare users: HasMany<typeof User>
 }
