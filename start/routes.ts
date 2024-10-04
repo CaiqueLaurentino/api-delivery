@@ -38,14 +38,15 @@ router
 //   })
 //   .use(middleware.auth())
 
+router.get('stores/:slug', [StoreController, 'show'])
+
 router
   .group(() => {
     /**
      * Stores Routes
      */
 
-    router.get('stores', [StoreController, 'index'])
-    // router.get('stores/:id', [StoreController, 'show'])
+    // router.get('stores', [StoreController, 'index'])
     router.post('stores', [StoreController, 'store'])
     router.put('stores/:id', [StoreController, 'update'])
     router.delete('stores/:id', [StoreController, 'destroy'])

@@ -4,25 +4,17 @@ import { createStoreValidator, updateStoreValidator } from '#validators/store'
 import StoreService from '../services/store_service.js'
 
 export default class StoreController {
-  async index({ response, request, auth }: HttpContext) {
-    const storeId = request.header('store_id')
+  async show({ response, view, params }: HttpContext) {
+    const { slug } = params
 
-    const store = await StoreService.DataStore(storeId!, auth.user!.id)
+    const store = await StoreService.DataStore(slug)
 
-    return response.ok(store)
+    if (!store) {
+      return response.notFound({ message: 'Store not found' })
+    }
+
+    return view.render('pages/menu', { store })
   }
-
-  // async show({ response, auth, request }: HttpContext) {
-  //   const storeId = request.header('store_id')
-
-  //   const store = await CompanyService.DataStore(storeId!, auth.user!.id)
-
-  //   if (!store) {
-  //     return response.notFound({ message: 'Store not found' })
-  //   }
-
-  //   return response.ok(store)
-  // }
 
   async store({ request, response, auth }: HttpContext) {
     const payload = await request.validateUsing(createStoreValidator)

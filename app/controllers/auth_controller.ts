@@ -9,12 +9,13 @@ export default class AuthController {
     const user = await User.verifyCredentials(email, password)
     const token = await User.accessTokens.create(user)
 
-    const store = await Store.query().select('id').where('user_id', user.id).firstOrFail()
+    const store = await Store.query().select('id', 'slug').where('user_id', user.id).firstOrFail()
 
     return response.ok({
       token: token,
       ...user.serialize(),
       store_id: store.id,
+      slug: store.slug,
     })
   }
 

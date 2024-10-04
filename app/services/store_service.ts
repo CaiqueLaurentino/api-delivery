@@ -1,6 +1,5 @@
 import StoreException from '#exceptions/store_exception'
 import Store from '#models/store'
-import User from '#models/user'
 
 export default class CompanyService {
   /**
@@ -23,23 +22,12 @@ export default class CompanyService {
     return userStore
   }
 
-  static async DataStore(storeId: number | string, userId: number) {
-    // Verifique se o usuário é o proprietário da loja
-    await this.verifyStoreOwner(storeId, userId)
-
-    // Carregar a loja e seus dados associados
+  static async DataStore(slug: string) {
     const userStore = await Store.query()
-      .where('id', storeId)
-      .preload('products')
-      .preload('categories')
-      .preload('orders', (query) => {
-        query.preload('order_items', (orderItemsQuery) => {
-          orderItemsQuery.preload('product')
-        })
+      .where('slug', slug)
+      .preload('categories', (ctg) => {
+        ctg.preload('products')
       })
-      // .preload('coupons')
-      // .preload('invoices')
-      // .preload('delivery_drivers')
       .firstOrFail()
 
     return userStore

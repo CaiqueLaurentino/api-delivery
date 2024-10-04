@@ -26,7 +26,7 @@ type CategoryObj = {
 
 type StoreData = CategoryObj[]
 export default class ProductController {
-  async index({ request, response, auth }: HttpContext) {
+  async index({ request, response, auth, view }: HttpContext) {
     try {
       const storeId = request.header('store_id')
 
@@ -53,7 +53,6 @@ export default class ProductController {
         })),
       }))
 
-      // Retorna os dados formatados na resposta
       return response.ok(products)
     } catch (error) {
       return response.badRequest({ message: error.message })

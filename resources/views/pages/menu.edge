@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ store.name }}</title>
+  @vite(['resources/css/menu.css', 'resources/js/menu.js'])
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <img src="{{ store.logo_url }}" alt="{{ store.name }} Logo">
+    </div>
+    <h1>{{ store.name }}</h1>
+    <p>{{ store.address }}</p>
+    <p>Contato: {{ store.contact_info }}</p>
+  </header>
+
+  <main>
+    <h2>Cardápio</h2>
+    <div class="categories">
+      @each(category in store.categories)
+      <section class="category">
+        <h3>{{ category.name }}</h3>
+        <div class="products">
+          @each(product in category.products)
+          <div class="product-card">
+            <img src="{{ product.image_url }}" alt="{{ product.name }}">
+            <h4>{{ product.name }}</h4>
+            <p>{{ product.description }}</p>
+            <p class="price">R$ {{ product.price }}</p>
+            <button {{ product.is_out_of_stock ? 'disabled' : '' }}>Adicionar ao Carrinho</button>
+          </div>
+          @end
+        </div>
+      </section>
+      @end
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 {{ store.name }} - Todos os direitos reservados</p>
+  </footer>
+</body>
+
+</html>

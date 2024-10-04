@@ -16,12 +16,12 @@ const shieldConfig = defineConfig({
    * to learn more
    */
   //TODO
-  // csrf: {
-  //   enabled: false,
-  //   exceptRoutes: [],
-  //   enableXsrfCookie: false,
-  //   methods: ['POST', 'PUT', 'PATCH', 'DELETE'],
-  // },
+  csrf: {
+    enabled: false,
+    exceptRoutes: [],
+    enableXsrfCookie: false,
+    methods: ['POST', 'PUT', 'PATCH', 'DELETE'],
+  },
 
   /**
    * Control how your website should be embedded inside
