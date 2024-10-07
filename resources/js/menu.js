@@ -24,3 +24,18 @@ document.addEventListener('scroll', function () {
     })
   }
 })
+
+// Função para abrir o carrinho (você pode modificar para direcionar ou abrir modal)
+function openCart() {
+  alert('Carrinho aberto!')
+  // Aqui você pode implementar a navegação para a página de checkout ou abrir um modal
+}
+
+// Atualizar o total de itens e o valor total (exemplo de valores estáticos para fins de demonstração)
+function updateCartSummary(totalItems, totalAmount) {
+  document.getElementById('total-items').textContent = totalItems
+  document.getElementById('total-amount').textContent = totalAmount.toFixed(2)
+}
+
+// Exemplo de atualização do carrinho (substitua com dados reais)
+updateCartSummary(3, 120.5) // Exemplo: 3 itens no carrinho, total de R$ 120,50
