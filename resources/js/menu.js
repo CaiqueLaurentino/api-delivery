@@ -25,17 +25,40 @@ document.addEventListener('scroll', function () {
   }
 })
 
-// Função para abrir o carrinho (você pode modificar para direcionar ou abrir modal)
-function openCart() {
-  alert('Carrinho aberto!')
-  // Aqui você pode implementar a navegação para a página de checkout ou abrir um modal
-}
+// Função para rolar até a categoria clicada
+document.querySelectorAll('#category-list a').forEach((link) => {
+  link.addEventListener('click', function (event) {
+    event.preventDefault()
+    const targetCategoryId = this.getAttribute('href').substring(1)
+    const targetCategory = document.getElementById(targetCategoryId)
 
-// Atualizar o total de itens e o valor total (exemplo de valores estáticos para fins de demonstração)
-function updateCartSummary(totalItems, totalAmount) {
-  document.getElementById('total-items').textContent = totalItems
-  document.getElementById('total-amount').textContent = totalAmount.toFixed(2)
-}
+    // Rola suavemente até a categoria clicada
+    targetCategory.scrollIntoView({ behavior: 'smooth' })
 
-// Exemplo de atualização do carrinho (substitua com dados reais)
-updateCartSummary(3, 120.5) // Exemplo: 3 itens no carrinho, total de R$ 120,50
+    // Remove a classe 'active' de todos os links
+    document
+      .querySelectorAll('#category-list a')
+      .forEach((l) => l.classList.remove('active-category'))
+
+    // Adiciona a classe 'active' ao link clicado
+    this.classList.add('active-category')
+  })
+})
+
+// Filtra os produtos com base na pesquisa
+document.getElementById('search-input').addEventListener('input', function () {
+  const query = this.value.toLowerCase() // Captura o texto digitado
+  const products = document.querySelectorAll('.product-item') // Seleciona todos os produtos
+
+  products.forEach((product) => {
+    const productName = product.querySelector('h3').textContent.toLowerCase() // Nome do produto
+    const productDescription = product.querySelector('p').textContent.toLowerCase() // Descrição do produto
+
+    // Verifica se o nome ou descrição contém a consulta de pesquisa
+    if (productName.includes(query) || productDescription.includes(query)) {
+      product.style.display = '' // Exibe o produto
+    } else {
+      product.style.display = 'none' // Oculta o produto
+    }
+  })
+})

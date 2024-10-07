@@ -5,8 +5,10 @@ import Product from '#models/product'
 import Category from './category.js'
 import Order from './order.js'
 import User from './user.js'
+import { compose } from '@adonisjs/core/helpers'
+import { Attachment, attachment, Attachmentable } from '@jrmc/adonis-attachment'
 
-export default class Store extends BaseModel {
+export default class Store extends compose(BaseModel, Attachmentable) {
   @column({ isPrimary: true })
   declare id: number
 
@@ -25,8 +27,8 @@ export default class Store extends BaseModel {
   @column()
   declare contact_info: string | null
 
-  @column()
-  declare logo_url: string | null
+  @attachment({ preComputeUrl: true })
+  declare logo: Attachment | null
 
   @column.dateTime({ autoCreate: true, serializeAs: null })
   declare createdAt: DateTime

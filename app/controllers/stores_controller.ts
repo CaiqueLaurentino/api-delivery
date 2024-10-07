@@ -2,7 +2,16 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Store from '#models/store'
 import { createStoreValidator, updateStoreValidator } from '#validators/store'
 import StoreService from '../services/store_service.js'
+import { Attachment, attachmentManager } from '@jrmc/adonis-attachment'
 
+type ObjStore = {
+  user_id: number
+  name: string
+  slug: string
+  address: string | null
+  contact_info: string | null
+  logo: Attachment | null
+}
 export default class StoreController {
   async show({ response, view, params }: HttpContext) {
     const { slug } = params
@@ -19,13 +28,17 @@ export default class StoreController {
   async store({ request, response, auth }: HttpContext) {
     const payload = await request.validateUsing(createStoreValidator)
 
-    const storeInfo = {
+    const storeInfo: ObjStore = {
       user_id: auth.user!.id,
       name: payload.name,
       slug: payload.slug,
       address: payload.address,
       contact_info: payload.contact_info,
-      logo_url: payload.logo_url,
+      logo: null,
+    }
+
+    if (payload.logo) {
+      storeInfo.logo = await attachmentManager.createFromFile(payload.logo)
     }
 
     const store = await Store.create(storeInfo)

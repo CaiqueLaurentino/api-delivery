@@ -1,5 +1,6 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import Product from '#models/product'
+import db from '@adonisjs/lucid/services/db'
 
 export default class ProductSeeder extends BaseSeeder {
   async run() {
@@ -7,12 +8,79 @@ export default class ProductSeeder extends BaseSeeder {
       {
         store_id: 1,
         category_id: 1,
-        name: 'Bolo de Chocolate',
-        description: 'Delicioso bolo de chocolate com cobertura cremosa.',
+        name: 'Pastel de Carne',
+        description: 'Pastel de carne',
         price: 29.99,
-        image_url:
-          'https://images.unsplash.com/photo-1464454709131-ffd692591ee5?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        is_out_of_stock: false,
+        image: null,
+        is_active: false,
+        availability: ['sun'],
+        restricted_ingredients: [1, 2],
+      },
+      {
+        store_id: 1,
+        category_id: 1,
+        name: 'Pastel de Frango',
+        description: 'Pastel de Frango',
+        price: 29.99,
+        image: null,
+        is_active: false,
+        availability: ['mon'],
+        restricted_ingredients: [1, 2],
+      },
+      {
+        store_id: 1,
+        category_id: 1,
+        name: 'Pastel de Queijo',
+        description: 'Pastel de Queijo',
+        price: 29.99,
+        image: null,
+        is_active: false,
+        availability: ['tue'],
+        restricted_ingredients: [1, 2],
+      },
+      {
+        store_id: 1,
+        category_id: 2,
+        name: 'Pastel de Frango II',
+        description: 'Pastel de Frango catupiry e bacon',
+        price: 29.99,
+        image: null,
+        is_active: false,
+        availability: ['fri'],
+        restricted_ingredients: [1, 2],
+      },
+      {
+        store_id: 1,
+        category_id: 2,
+        name: 'Pastel de Carne II',
+        description: 'Pastel de Carne, Ovo e Bacon',
+        price: 29.99,
+        image: null,
+        is_active: false,
+        availability: ['sat'],
+        restricted_ingredients: [1, 2],
+      },
+      {
+        store_id: 1,
+        category_id: 3,
+        name: 'Pastel Especial Frango',
+        description: 'Pastel de Frango catupiry, bacon, Milho, Calabresa',
+        price: 29.99,
+        image: null,
+        is_active: false,
+        availability: ['wed'],
+        restricted_ingredients: [1, 2],
+      },
+      {
+        store_id: 1,
+        category_id: 3,
+        name: 'Pastel Especial Carne',
+        description: 'Pastel de Carne, Ovo, Bacon Milho, Azeitona, Tomate',
+        price: 29.99,
+        image: null,
+        is_active: false,
+        availability: ['wed'],
+        restricted_ingredients: [1, 2],
       },
       {
         store_id: 2,
@@ -20,10 +88,21 @@ export default class ProductSeeder extends BaseSeeder {
         name: 'Bolacha de Manteiga',
         description: 'Bolacha crocante de manteiga, ideal para o lanche.',
         price: 9.99,
-        image_url:
-          'https://images.unsplash.com/photo-1464454709131-ffd692591ee5?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        is_out_of_stock: false,
+        image: null,
+        is_active: false,
       },
     ])
+    await db.from('products').update(
+      'image',
+      JSON.stringify({
+        meta: { dimension: { width: 460, height: 350 } },
+        name: 'rp2kzwkzdms7y6doiiktd7wz.png',
+        path: 'uploads/rp2kzwkzdms7y6doiiktd7wz.png',
+        size: 43567,
+        extname: 'png',
+        mimeType: 'image/png',
+        originalName: 'pastel.png',
+      })
+    )
   }
 }

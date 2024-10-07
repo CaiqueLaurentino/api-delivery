@@ -9,6 +9,7 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+import { json } from 'stream/consumers'
 const ProductController = () => import('#controllers/products_controller')
 const AuthController = () => import('#controllers/auth_controller')
 const StoreController = () => import('#controllers/stores_controller')

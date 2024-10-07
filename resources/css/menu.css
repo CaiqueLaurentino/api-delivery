@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+.active-category {
+  color: #d32f2f;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+:root {
+  --primary-color: #d32f2f;
+}
+
+body {
+  background-color: #f8f8f8;
+  color: #333;
+}
+
+.header {
+  background-color: var(--primary-color);
+}
+
+.header-text {
+  color: #fff;
+}

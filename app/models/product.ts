@@ -2,8 +2,12 @@ import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Category from './category.js'
+import { compose } from '@adonisjs/core/helpers'
+import { attachment, Attachmentable } from '@jrmc/adonis-attachment'
+import type { Attachment } from '@jrmc/adonis-attachment/types/attachment'
+import { jsonField } from './decorators/json_field.js'
 
-export default class Product extends BaseModel {
+export default class Product extends compose(BaseModel, Attachmentable) {
   @column({ isPrimary: true })
   declare id: number
 
@@ -22,11 +26,17 @@ export default class Product extends BaseModel {
   @column()
   declare price: number
 
-  @column()
-  declare image_url: string | null
+  @attachment({ preComputeUrl: true })
+  declare image: Attachment | null
 
   @column()
-  declare is_out_of_stock: boolean
+  declare is_active: boolean
+
+  @jsonField()
+  declare restricted_ingredients: number[] | null
+
+  @jsonField()
+  declare availability: string[] | null
 
   @column.dateTime({ autoCreate: true, serializeAs: null })
   declare createdAt: DateTime

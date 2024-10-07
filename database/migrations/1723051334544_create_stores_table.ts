@@ -11,7 +11,7 @@ export default class extends BaseSchema {
       table.string('slug').unique().notNullable()
       table.text('address').nullable()
       table.text('contact_info').nullable()
-      table.string('logo_url').nullable()
+      table.json('logo').nullable()
       table.timestamp('created_at').defaultTo(this.now())
       table.timestamp('updated_at').defaultTo(this.now())
     })

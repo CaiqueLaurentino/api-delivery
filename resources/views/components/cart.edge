@@ -1,0 +1,18 @@
+<!-- Rodapé fixo para o carrinho -->
+<div class="fixed bottom-0 left-0 w-full bg-white shadow-md flex justify-between p-4 items-center z-50">
+  <div class="flex flex-col gap-1">
+    <p class="text-xs">Total de itens: <span id="total-items">0</span></p>
+    <p class="text-sm font-bold text-green-500">R$ <span id="total-amount">0,00</span></p>
+  </div>
+  <div
+    class="bg-red-500 text-white py-2 px-4 rounded-lg font-bold cursor-pointer hover:bg-red-600 transition flex items-center gap-2"
+    onclick="openCart()">
+    <!-- Ícone de carrinho -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+      stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m15-9l-2 9m-5-9v9" />
+    </svg>
+    <span>Ver Carrinho</span>
+  </div>
+</div>

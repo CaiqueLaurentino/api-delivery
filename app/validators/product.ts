@@ -4,6 +4,7 @@ import vine from '@vinejs/vine'
 export const createProductValidator = (storeId: number | string) =>
   vine.compile(
     vine.object({
+      // id: vine.number(),
       category_id: vine
         .number()
         .positive()
@@ -25,8 +26,8 @@ export const createProductValidator = (storeId: number | string) =>
         }),
       description: vine.string().maxLength(1000).nullable(),
       price: vine.number().min(0),
-      image_url: vine.string().url().nullable(),
-      is_out_of_stock: vine.boolean(),
+      image: vine.file().nullable(),
+      is_active: vine.boolean(),
     })
   )
 
@@ -37,6 +38,6 @@ export const updateProductValidator = vine.compile(
     description: vine.string().maxLength(1000).nullable().optional(),
     price: vine.number().min(0).optional(),
     image_url: vine.string().url().nullable().optional(),
-    is_out_of_stock: vine.boolean().optional(),
+    is_active: vine.boolean().optional(),
   })
 )

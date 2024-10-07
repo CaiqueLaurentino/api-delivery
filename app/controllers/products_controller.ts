@@ -5,15 +5,17 @@ import StoreService from '../services/store_service.js'
 import ProductService from '#services/product_service'
 import CategoryService from '#services/category_service'
 import Category from '#models/category'
+import { Attachment, attachmentManager } from '@jrmc/adonis-attachment'
 
 type ObjProduct = {
+  id?: number
   store_id: number
   category_id: number | null
   name: string
   description: string | null
   price: number
-  image_url: string | null
-  is_out_of_stock: boolean
+  image: Attachment | null
+  is_active: boolean
 }
 
 type CategoryObj = {
@@ -24,32 +26,29 @@ type CategoryObj = {
   products: ObjProduct[]
 }
 
-type StoreData = CategoryObj[]
 export default class ProductController {
-  async index({ request, response, auth, view }: HttpContext) {
+  async index({ request, response, auth }: HttpContext) {
     try {
       const storeId = request.header('store_id')
 
       await StoreService.verifyStoreOwner(storeId!, auth.user!.id)
 
-      const categories: Category[] = await Category.query()
-        .preload('products')
-        .where('store_id', storeId!)
+      const categories = await Category.query().preload('products').where('store_id', storeId!)
 
-      const products: StoreData = categories.map((category) => ({
+      const products: CategoryObj[] = categories.map((category) => ({
         id: category.id,
         store_id: category.store_id,
         name: category.name,
         description: category.description ? category.description : '',
-        products: category.products.map((product) => ({
+        products: category.serialize().products.map((product: ObjProduct) => ({
           id: product.id,
           store_id: product.store_id,
           category_id: product.category_id,
           name: product.name,
           description: product.description,
           price: product.price,
-          image_url: product.image_url,
-          is_out_of_stock: product.is_out_of_stock,
+          image: product?.image ?? null,
+          is_active: product.is_active,
         })),
       }))
 
@@ -75,6 +74,7 @@ export default class ProductController {
     try {
       const storeId = request.header('store_id')
 
+      console.log(request.body())
       const payload = await request.validateUsing(createProductValidator(storeId!))
 
       const store = await StoreService.verifyStoreOwner(storeId!, auth.user!.id)
@@ -82,8 +82,12 @@ export default class ProductController {
       const objProduct: ObjProduct = {
         ...payload,
         store_id: store.id,
+        image: null,
       }
 
+      if (payload.image) {
+        objProduct.image = await attachmentManager.createFromFile(payload.image)
+      }
       const product = await Product.create(objProduct)
 
       return response.created(product)

@@ -6,13 +6,18 @@ export default class CategorySeeder extends BaseSeeder {
     await Category.createMany([
       {
         store_id: 1,
-        name: 'Doces',
-        description: 'Categoria para todos os tipos de doces.',
+        name: 'Pastéis Simples',
+        description: 'Pastéis com 1 ou 2 recheios!',
       },
       {
         store_id: 1,
-        name: 'Bolachas',
-        description: 'Categoria para bolachas e biscoitos.',
+        name: 'Pastéis Reacheados',
+        description: 'Pastéis com 3 recheios',
+      },
+      {
+        store_id: 1,
+        name: 'Pastéis Especiais',
+        description: 'Pastéis com 4 ou mais recheios',
       },
     ])
   }

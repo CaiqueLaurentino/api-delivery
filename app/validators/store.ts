@@ -6,7 +6,7 @@ export const createStoreValidator = vine.compile(
     slug: vine.string().minLength(1).maxLength(255),
     address: vine.string().maxLength(255).nullable(),
     contact_info: vine.string().maxLength(15).nullable(),
-    logo_url: vine.string().activeUrl(),
+    logo: vine.file().nullable(),
   })
 )
 
