@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ store.name }} - Cardápio</title>
-  @vite(['resources/css/menu.css', 'resources/js/menu.js'])
+  @vite(['resources/css/menu.css', 'resources/js/menu.js', 'resources/js/modalConfirm.js'])
 </head>
 
 <body class="bg-gray-50">
@@ -51,6 +51,7 @@
       <!-- Grid de produtos por categoria -->
       <div class="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         @each(product in category.products)
+
         <div class="product-item bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between">
           <div>
             <div class="relative">
@@ -63,6 +64,9 @@
             <div class="p-3">
               <h3 class="text-sm font-medium text-gray-900">{{ product.name }}</h3>
               <p class="text-xs text-gray-500 line-clamp-2">{{ product.description || 'Sem descrição disponível.' }}</p>
+              @each(ingre in product.restricted_ingredients)
+              <p>{{ingre.name}}</p>
+              @end
             </div>
           </div>
           <!-- Preço e botão de adicionar -->
@@ -71,10 +75,13 @@
               <span class="mr-1">R$</span>{{ product.price }}
             </p>
             <button
-              class="bg-red-500 text-white py-1 px-3 rounded-md text-sm hover:bg-red-600 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
-              style="flex-shrink: 0;" {{ product.is_active ? 'disabled' : '' }}>
+              class="add-to-cart bg-red-500 text-white py-1 px-3 rounded-md text-sm hover:bg-red-600 transition {{ product.is_active ? 'disabled:bg-gray-400 disabled:cursor-not-allowed' : '' }}"
+              {{ product.is_active ? 'disabled' : '' }} data-id="{{ product.id }}" data-name="{{ product.name }}"
+              data-price="{{ product.price }}" data-image="{{ product.image.url }}"
+              data-description="{{ product.description }}" data-restricted='{{ product.restricted_ingredients || 0 }}'>
               {{ product.is_active ? 'Esgotado' : 'Adicionar' }}
             </button>
+
           </div>
         </div>
         @end
@@ -85,11 +92,13 @@
 
   </div>
 
-  {{-- Carrinho --}}
+  {{-- Cart --}}
   @component('components/cart', { })
+  @endcomponent
 
-  @end
-
+  {{-- Modal Confirm --}}
+  @component('components/modalConfirm', { product: product })
+  @endcomponent
 </body>
 
 </html>

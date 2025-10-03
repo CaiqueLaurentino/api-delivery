@@ -1,0 +1,32 @@
+<!-- Modal de Confirmação -->
+<div id="confirm-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+  <div class="bg-white p-6 rounded-lg shadow-md w-11/12 sm:w-1/2">
+
+    <!-- Título do Produto -->
+    <h2 class="text-lg font-semibold mb-4 modal-title" id="modal-product-name"></h2>
+
+    <!-- Imagem do Produto -->
+    <img src="" alt="Produto" class="w-full h-32 object-cover mb-4 modal-image" id="modal-product-image">
+
+    <!-- Preço do Produto -->
+    <p class="mt-2">Preço: R$ <span class="modal-price" id="modal-product-price"></span></p>
+
+    <!-- Descrição do Produto -->
+    <p class="mt-2 modal-description" id="modal-product-description"></p>
+
+    <!-- Disponibilidade do Produto -->
+    <p class="mt-2 modal-availability" id="modal-product-availability">Disponibilidade: Disponível todos os dias</p>
+
+    <!-- Ingredientes Restritos -->
+    <h3 class="mt-4 font-bold">Ingredientes Restritos:</h3>
+    <ul class="modal-restricted" id="restricted-ingredients-list">
+      <li>Sem ingredientes restritos</li> <!-- Esse será substituído se houver ingredientes -->
+    </ul>
+
+    <!-- Botões -->
+    <div class="mt-4">
+      <button id="confirm-add" class="bg-green-500 text-white py-2 px-4 rounded-md">Adicionar ao Carrinho</button>
+      <button class="close-modal bg-gray-300 text-gray-700 py-2 px-4 rounded-md">Cancelar</button>
+    </div>
+  </div>
+</div>

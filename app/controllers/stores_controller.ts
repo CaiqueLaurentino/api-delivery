@@ -13,16 +13,22 @@ type ObjStore = {
   logo: Attachment | null
 }
 export default class StoreController {
-  async show({ response, view, params }: HttpContext) {
-    const { slug } = params
+  async show({ response, view, params, request }: HttpContext) {
+    try {
+      const { slug } = params
 
-    const store = await StoreService.DataStore(slug)
+      const storeId = request.header('store_id')
 
-    if (!store) {
-      return response.notFound({ message: 'Store not found' })
+      const store = await StoreService.DataStore(slug, 1)
+
+      if (!store) {
+        return response.notFound({ message: 'Store not found' })
+      }
+
+      return view.render('pages/menu', { store })
+    } catch (e) {
+      console.log(e)
     }
-
-    return view.render('pages/menu', { store })
   }
 
   async store({ request, response, auth }: HttpContext) {

@@ -16,6 +16,8 @@ type ObjProduct = {
   price: number
   image: Attachment | null
   is_active: boolean
+  restricted_ingredients: number[]
+  availability: string[]
 }
 
 type CategoryObj = {
@@ -49,6 +51,8 @@ export default class ProductController {
           price: product.price,
           image: product?.image ?? null,
           is_active: product.is_active,
+          restricted_ingredients: product.restricted_ingredients,
+          availability: product.availability,
         })),
       }))
 

@@ -6,6 +6,7 @@ import { compose } from '@adonisjs/core/helpers'
 import { attachment, Attachmentable } from '@jrmc/adonis-attachment'
 import type { Attachment } from '@jrmc/adonis-attachment/types/attachment'
 import { jsonField } from './decorators/json_field.js'
+import Ingredient from './ingredient.js'
 
 export default class Product extends compose(BaseModel, Attachmentable) {
   @column({ isPrimary: true })
