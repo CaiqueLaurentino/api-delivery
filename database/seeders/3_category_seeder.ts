@@ -19,6 +19,11 @@ export default class CategorySeeder extends BaseSeeder {
         name: 'Pastéis Especiais',
         description: 'Pastéis com 4 ou mais recheios',
       },
+      {
+        store_id: 2,
+        name: 'Pizzas',
+        description: 'Pizzas',
+      },
     ])
   }
 }

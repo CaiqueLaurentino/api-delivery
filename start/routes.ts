@@ -24,7 +24,7 @@ router
   .group(() => {
     router.post('register', [AuthController, 'register'])
     router.post('login', [AuthController, 'login'])
-    router.post('logout', [AuthController, 'logout']).use(middleware.auth())
+    // router.post('logout', [AuthController, 'logout']).use(middleware.auth())
   })
   .prefix('user')
 
@@ -78,8 +78,8 @@ router
 
     router.get('orders', [OrdersController, 'index'])
     router.post('orders', [OrdersController, 'store'])
-    router.get('orders/:id', [OrdersController, 'show']) // Detalhes de um pedido específico
-    router.put('orders/:id', [OrdersController, 'updateStatus']) // Atualizar status do pedido
+    router.get('orders/:id', [OrdersController, 'show'])
+    router.put('orders/:id', [OrdersController, 'updateStatus'])
     router.get('orders.history', [OrdersController, 'history'])
     router.delete('orders/:id', [OrdersController, 'destroy'])
   })

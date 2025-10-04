@@ -17,7 +17,7 @@ export default class extends BaseSeeder {
       {
         name: 'Leite em pó',
         additional_price: 2.0,
-        store_id: 1,
+        store_id: 2,
       },
     ]
 

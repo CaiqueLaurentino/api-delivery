@@ -66,7 +66,7 @@ export default class OrderController {
         store_id: order.store_id,
         user_id: order.user_id!,
         customer_name: order.customer_name,
-        customer_contact: order.customer_contact, // Adiciona o número de contato do cliente
+        customer_contact: order.customer_contact,
         status: order.status,
         total_amount: order.total_amount.toString(),
         delivery_fee: order.delivery_fee.toString(),
@@ -161,7 +161,7 @@ export default class OrderController {
       store_id: userStore!.id,
       user_id: payload.user_id,
       customer_name: payload.customer_name,
-      customer_contact: payload.customer_contact, // Inclui customer_contact
+      customer_contact: payload.customer_contact,
       status: payload.status,
       total_amount: payload.total_amount,
       delivery_fee: payload.delivery_fee,
@@ -196,20 +196,15 @@ export default class OrderController {
       const orderId = params.id
       const storeId = request.header('store_id')
 
-      // Verifica se o dono da loja está autenticado
       await StoreService.verifyStoreOwner(storeId!, auth.user!.id)
 
-      // Pega o novo status do corpo da requisição
       const { status } = request.only(['status'])
 
-      // Verifica se o pedido existe
       const order = await OrderService.verifyOrder(storeId!, orderId)
 
-      // Atualiza o status
       order.status = status
       await order.save()
 
-      // Mensagem personalizada dependendo do status
       let whatsappMessage = ''
       switch (status) {
         case OrderStatus.IN_PROGRESS:

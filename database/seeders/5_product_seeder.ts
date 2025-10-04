@@ -85,9 +85,9 @@ export default class ProductSeeder extends BaseSeeder {
       {
         store_id: 2,
         category_id: 2,
-        name: 'Bolacha de Manteiga',
-        description: 'Bolacha crocante de manteiga, ideal para o lanche.',
-        price: 9.99,
+        name: 'Pizza de Mussarela',
+        description: 'Pizza de Mussarela',
+        price: 29.99,
         image: null,
         is_active: false,
       },

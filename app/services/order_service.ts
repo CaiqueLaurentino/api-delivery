@@ -19,15 +19,12 @@ export default class OrderService {
   }
 
   /**
-   * Envia uma mensagem de atualização de status para o cliente via WhatsApp.
-   * @param customerContact - Número de telefone do cliente.
-   * @param message - Mensagem a ser enviada.
+   * @param customerContact
+   * @param message -
    */
   static async sendWhatsAppMessage(customerContact: string, message: string) {
-    // URL para o WhatsApp Web
     const whatsappWebUrl = `https://web.whatsapp.com/send?phone=${customerContact}&text=${encodeURIComponent(message)}`
-    console.log(`Enviando mensagem para: ${customerContact} - Conteúdo: ${message}`)
-    // Simule ou envie a mensagem para o cliente usando a URL gerada
+    // console.log(`Enviando mensagem para: ${customerContact} - Conteúdo: ${message}`)
     return whatsappWebUrl
   }
 }

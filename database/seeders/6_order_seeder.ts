@@ -18,7 +18,7 @@ export default class OrderSeeder extends BaseSeeder {
       {
         store_id: 2,
         user_id: 2,
-        customer_name: 'CELSONA',
+        customer_name: 'Marcello',
         customer_contact: '11942007925',
         status: 'pending',
         total_amount: 29.99,

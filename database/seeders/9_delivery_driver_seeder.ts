@@ -12,7 +12,7 @@ export default class DeliveryDriverSeeder extends BaseSeeder {
       },
       {
         store_id: 2,
-        name: 'Maria Oliveira',
+        name: 'Mario Oliveira',
         phone_number: '0987654321',
         address: 'Rua B, 456, São Paulo',
       },

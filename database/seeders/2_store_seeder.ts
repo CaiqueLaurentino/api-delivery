@@ -14,8 +14,8 @@ export default class StoreSeeder extends BaseSeeder {
       },
       {
         user_id: 2,
-        name: 'Padaria do João',
-        slug: 'padaria-do-joao',
+        name: 'Pizzaria do João',
+        slug: 'pizzaria-do-joao',
         address: 'Avenida Brasil, 456, São Paulo, SP',
         contact_info: 'Telefone: (11) 9876-5432',
         logo: null,

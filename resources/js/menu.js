@@ -1,4 +1,3 @@
-// Função para detectar a categoria visível na tela
 document.addEventListener('scroll', function () {
   const categories = document.querySelectorAll('.category-section')
   const categoryLinks = document.querySelectorAll('#category-list a')
@@ -25,40 +24,34 @@ document.addEventListener('scroll', function () {
   }
 })
 
-// Função para rolar até a categoria clicada
 document.querySelectorAll('#category-list a').forEach((link) => {
   link.addEventListener('click', function (event) {
     event.preventDefault()
     const targetCategoryId = this.getAttribute('href').substring(1)
     const targetCategory = document.getElementById(targetCategoryId)
 
-    // Rola suavemente até a categoria clicada
     targetCategory.scrollIntoView({ behavior: 'smooth' })
 
-    // Remove a classe 'active' de todos os links
     document
       .querySelectorAll('#category-list a')
       .forEach((l) => l.classList.remove('active-category'))
 
-    // Adiciona a classe 'active' ao link clicado
     this.classList.add('active-category')
   })
 })
 
-// Filtra os produtos com base na pesquisa
 document.getElementById('search-input').addEventListener('input', function () {
-  const query = this.value.toLowerCase() // Captura o texto digitado
-  const products = document.querySelectorAll('.product-item') // Seleciona todos os produtos
+  const query = this.value.toLowerCase()
+  const products = document.querySelectorAll('.product-item')
 
   products.forEach((product) => {
-    const productName = product.querySelector('h3').textContent.toLowerCase() // Nome do produto
-    const productDescription = product.querySelector('p').textContent.toLowerCase() // Descrição do produto
+    const productName = product.querySelector('h3').textContent.toLowerCase()
+    const productDescription = product.querySelector('p').textContent.toLowerCase()
 
-    // Verifica se o nome ou descrição contém a consulta de pesquisa
     if (productName.includes(query) || productDescription.includes(query)) {
-      product.style.display = '' // Exibe o produto
+      product.style.display = ''
     } else {
-      product.style.display = 'none' // Oculta o produto
+      product.style.display = 'none'
     }
   })
 })

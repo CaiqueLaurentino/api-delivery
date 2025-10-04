@@ -22,7 +22,7 @@ export default class extends BaseSchema {
       table.string('name').notNullable()
       table.text('description').nullable()
       table.decimal('price', 10, 2).notNullable()
-      table.json('image').nullable()
+      table.text('image').nullable()
       table.boolean('is_active').defaultTo(false)
       table.json('restricted_ingredients').nullable()
       table.json('availability').nullable()

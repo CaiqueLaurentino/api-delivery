@@ -16,8 +16,8 @@ type ObjProduct = {
   price: number
   image: Attachment | null
   is_active: boolean
-  restricted_ingredients: number[]
-  availability: string[]
+  restricted_ingredients?: number[]
+  availability?: string[]
 }
 
 type CategoryObj = {
@@ -78,7 +78,6 @@ export default class ProductController {
     try {
       const storeId = request.header('store_id')
 
-      console.log(request.body())
       const payload = await request.validateUsing(createProductValidator(storeId!))
 
       const store = await StoreService.verifyStoreOwner(storeId!, auth.user!.id)
@@ -89,9 +88,9 @@ export default class ProductController {
         image: null,
       }
 
-      if (payload.image) {
-        objProduct.image = await attachmentManager.createFromFile(payload.image)
-      }
+      // if (payload.image) {
+      //   objProduct.image = await attachmentManager.createFromFile(payload.image)
+      // }
       const product = await Product.create(objProduct)
 
       return response.created(product)
